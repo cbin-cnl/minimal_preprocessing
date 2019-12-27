@@ -16,12 +16,7 @@ MOTION_CORRECTION = (
     "-zpad 4 "
     "-maxdisp1D max_displacement.1D {filepath}"
 )
-AUTOMASK = (
-    "3dAutomask "
-    "-apply_prefix {outpath} "
-    "-prefix {maskpath} "
-    "{filepath}"
-)
+AUTOMASK = "3dAutomask " "-apply_prefix {outpath} " "-prefix {maskpath} " "{filepath}"
 
 
 def print_bash_cmd(cmd_str):
@@ -62,7 +57,9 @@ def func_pipeline(functional_path, output_path):
     # Motion correction
     volreg = resampled.replace(".nii.gz", "_volreg.nii.gz")
     if not Path(volreg).exists():
-        volreg_cmd_one = MOTION_CORRECTION.format(filepath=resampled, meanpath=mean, outpath=volreg)
+        volreg_cmd_one = MOTION_CORRECTION.format(
+            filepath=resampled, meanpath=mean, outpath=volreg
+        )
         run_cmd(env, volreg_cmd_one)
 
     # Volreg Mean
@@ -74,7 +71,9 @@ def func_pipeline(functional_path, output_path):
     # Motion correction 2
     volregA = resampled.replace(".nii.gz", "_volregA.nii.gz")
     if not Path(volregA).exists():
-        volreg_cmd_two = MOTION_CORRECTION.format(filepath=resampled, meanpath=volreg_mean, outpath=volregA)
+        volreg_cmd_two = MOTION_CORRECTION.format(
+            filepath=resampled, meanpath=volreg_mean, outpath=volregA
+        )
         run_cmd(env, volreg_cmd_two)
 
     masked = volregA.replace(".nii.gz", "_masked.nii.gz")
@@ -89,6 +88,7 @@ def func_pipeline(functional_path, output_path):
         run_cmd(env, masked_mean_cmd)
 
     return volregA, masked, masked_mean
+
 
 def run_cmd(env, refit_cmd):
     print_bash_cmd(refit_cmd)
