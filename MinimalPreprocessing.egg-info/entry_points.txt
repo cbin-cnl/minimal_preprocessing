@@ -1,0 +1,3 @@
+[console_scripts]
+preprocess_peer = minimal_preprocessing.run_minimal_preprocessing:main
+

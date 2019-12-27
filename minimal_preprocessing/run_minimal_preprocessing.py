@@ -1,12 +1,12 @@
-import anatomical_pipeline as ap
-import registration_pipeline as rp
-import functional_pipeline as fp
+import minimal_preprocessing.anatomical_pipeline as ap
+import minimal_preprocessing.registration_pipeline as rp
+import minimal_preprocessing.functional_pipeline as fp
 import argparse
 import shutil
 from pathlib import Path
 
 
-def main(func_image, anat_image, output_directory):
+def run_pipelines(func_image, anat_image, output_directory):
     tmp_functional = Path("/tmp/functional")
     tmp_anatomical = Path("/tmp/anatomical")
     if not tmp_functional.exists():
@@ -37,7 +37,7 @@ def main(func_image, anat_image, output_directory):
     shutil.copy(warped, str(output_dir))
 
 
-if __name__ == "__main__":
+def main():
     parser = argparse.ArgumentParser("run a minimal preprocessing pipeline")
     parser.add_argument(
         "func_image", help="a functional MRI image, must be in .nii.gz format"
@@ -47,4 +47,8 @@ if __name__ == "__main__":
     )
     parser.add_argument("output_directory", help="the output directory ")
     args = parser.parse_args()
-    main(args.func_image, args.anat_image, args.output_directory)
+    run_pipelines(args.func_image, args.anat_image, args.output_directory)
+
+
+if __name__ == "__main__":
+    main()

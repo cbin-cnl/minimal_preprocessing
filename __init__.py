@@ -1,0 +1,1 @@
+import minimal_preprocessing.anatomical_pipeline
