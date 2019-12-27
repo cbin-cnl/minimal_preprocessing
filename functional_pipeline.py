@@ -28,16 +28,16 @@ def print_bash_cmd(cmd_str):
     print(cmd_str.replace(" -", "\n -"))
 
 
-def func_pipeline(anatomical_path, output_path):
-    if not Path(anatomical_path).exists():
-        print("The anat file does not exist at: " + anatomical_path)
+def func_pipeline(functional_path, output_path):
+    if not Path(functional_path).exists():
+        print("The anat file does not exist at: " + functional_path)
         exit(1)
     if not Path(output_path).exists():
         print("The output folder does not exist at: " + output_path)
         exit(1)
-    shutil.copy(anatomical_path, output_path)
+    shutil.copy(functional_path, output_path)
     output_folder = Path(output_path)
-    infile = str(output_folder / anatomical_path)
+    infile = str(output_folder / functional_path)
     env = os.environ.copy()
     env["PATH"] = env["PATH"] + ":/opt/afni:/usr/share/fsl/5.0/bin:/usr/lib/fsl/5.0"
     env["FSLDIR"] = "/usr/share/fsl/5.0"
@@ -88,7 +88,7 @@ def func_pipeline(anatomical_path, output_path):
         masked_mean_cmd = MEAN.format(filepath=masked, outpath=masked_mean)
         run_cmd(env, masked_mean_cmd)
 
-    return masked, masked_mean
+    return volregA, masked, masked_mean
 
 def run_cmd(env, refit_cmd):
     print_bash_cmd(refit_cmd)

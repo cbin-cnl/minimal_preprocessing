@@ -89,12 +89,15 @@ def anat_pipeline(anatomical_path, output_path):
         run_cmd(env, thresh_cmd)
 
     # Register to MNI
-    reg_cmd = REGISTRATION.format(filepath=skullstrip, outpath=output_folder)
-    run_cmd(env, reg_cmd)
-    transform3 = output_path / "transform3Warp.nii.gz"
-    transform2 = output_path / "transform2Affine.mat"
-    transform1 = output_path / "transform1Rigid.mat"
-    transform0 = output_path / "transform0DerivedInitialMovingTranslation.mat"
+
+    transform3 = os.path.join(output_path, "transform3Warp.nii.gz")
+    transform2 = os.path.join(output_path, "transform2Affine.mat")
+    transform1 = os.path.join(output_path, "transform1Rigid.mat")
+    transform0 = os.path.join(output_path, "transform0DerivedInitialMovingTranslation.mat")
+    if not (os.path.exists(transform3) and os.path.exists(transform2) and os.path.exists(transform1) and
+        os.path.exists(transform0)):
+        reg_cmd = REGISTRATION.format(filepath=skullstrip, outpath=output_folder)
+        run_cmd(env, reg_cmd)
     return skullstrip, wm_segment, transform3, transform2, transform1, transform0
 
 
