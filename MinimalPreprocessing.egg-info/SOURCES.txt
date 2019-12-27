@@ -1,0 +1,10 @@
+setup.py
+MinimalPreprocessing.egg-info/PKG-INFO
+MinimalPreprocessing.egg-info/SOURCES.txt
+MinimalPreprocessing.egg-info/dependency_links.txt
+MinimalPreprocessing.egg-info/entry_points.txt
+MinimalPreprocessing.egg-info/top_level.txt
+minimal_preprocessing/anatomical_pipeline.py
+minimal_preprocessing/functional_pipeline.py
+minimal_preprocessing/registration_pipeline.py
+minimal_preprocessing/run_minimal_preprocessing.py
