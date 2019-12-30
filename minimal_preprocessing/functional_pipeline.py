@@ -31,8 +31,9 @@ def func_pipeline(functional_path, output_path):
         print("The output folder does not exist at: " + output_path)
         exit(1)
     shutil.copy(functional_path, output_path)
+    functional_file = Path(functional_path).name
     output_folder = Path(output_path)
-    infile = str(output_folder / functional_path)
+    infile = str(output_folder / functional_file)
     env = os.environ.copy()
     env["PATH"] = env["PATH"] + ":/opt/afni:/usr/share/fsl/5.0/bin:/usr/lib/fsl/5.0"
     env["FSLDIR"] = "/usr/share/fsl/5.0"
