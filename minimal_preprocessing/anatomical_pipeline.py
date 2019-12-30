@@ -56,7 +56,8 @@ def anat_pipeline(anatomical_path, output_path):
         exit(1)
     shutil.copy(anatomical_path, output_path)
     output_folder = Path(output_path)
-    infile = str(output_folder / anatomical_path)
+    anatomical_file = Path(anatomical_path).name
+    infile = str(output_folder / anatomical_file)
     env = os.environ.copy()
     env["PATH"] = env["PATH"] + ":/opt/afni:/usr/share/fsl/5.0/bin:/usr/lib/fsl/5.0"
     env["FSLDIR"] = "/usr/share/fsl/5.0"
