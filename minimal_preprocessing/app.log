@@ -1,0 +1,183 @@
+3drefit
+ -deoblique /tmp/anatomical/co20190109_114343MPRAGESIEMENSTi1100s011a1001A.nii.gz
+3drefit
+ -deoblique /tmp/functional/20190109_114343PEER1s003a001A.nii.gz
+
+++ 3drefit: AFNI version=AFNI_18.2.04 (Jul  6 2018) [64-bit]
+++ Authored by: RW Cox
+++ Processing AFNI dataset /tmp/anatomical/co20190109_114343MPRAGESIEMENSTi1100s011a1001A.nii.gz
+ + deoblique
+ + loading and re-writing dataset /tmp/anatomical/co20190109_114343MPRAGESIEMENSTi1100s011a1001A.nii.gz (/tmp/anatomical/co20190109_114343MPRAGESIEMENSTi1100s011a1001A.nii.gz in NIFTI storage)
+++ 3drefit processed 1 datasets
+
+Elapsed time: 1.94s
+
+++ 3drefit: AFNI version=AFNI_18.2.04 (Jul  6 2018) [64-bit]
+++ Authored by: RW Cox
+++ Processing AFNI dataset /tmp/functional/20190109_114343PEER1s003a001A.nii.gz
+ + deoblique
+ + loading and re-writing dataset /tmp/functional/20190109_114343PEER1s003a001A.nii.gz (/tmp/functional/20190109_114343PEER1s003a001A.nii.gz in NIFTI storage)
+++ 3drefit processed 1 datasets
+
+Elapsed time: 18.12s
+3dresample
+ -orient RPI
+ -prefix /tmp/functional/20190109_114343PEER1s003a001A_resample.nii.gz
+ -inset /tmp/functional/20190109_114343PEER1s003a001A.nii.gz
+
+
+Elapsed time: 18.81s
+3dTstat
+ -mean
+ -prefix /tmp/functional/20190109_114343PEER1s003a001A_resample_tstat.nii.gz /tmp/functional/20190109_114343PEER1s003a001A_resample.nii.gz
+
+++ 3dTstat: AFNI version=AFNI_18.2.04 (Jul  6 2018) [64-bit]
+++ Authored by: KR Hammett & RW Cox
+++ Output dataset /tmp/functional/20190109_114343PEER1s003a001A_resample_tstat.nii.gz
+
+Elapsed time: 1.97s
+3dvolreg
+ -Fourier
+ -twopass
+ -1Dfile /tmp/functional/resample.1D
+ -1Dmatrix_save /tmp/functional/aff12.1D
+ -prefix /tmp/functional/20190109_114343PEER1s003a001A_resample_volreg.nii.gz
+ -base /tmp/functional/20190109_114343PEER1s003a001A_resample_tstat.nii.gz
+ -zpad 4
+ -maxdisp1D /tmp/functional/max_displacement.1D /tmp/functional/20190109_114343PEER1s003a001A_resample.nii.gz
+
+++ 3dvolreg: AFNI version=AFNI_18.2.04 (Jul  6 2018) [64-bit]
+++ Authored by: RW Cox
+++ Coarse del was 10, replaced with 6
+++ Max displacement in automask = 0.42 (mm) at sub-brick 130
+++ Max delta displ  in automask = 0.14 (mm) at sub-brick 54
+
+Elapsed time: 418.76s
+3dTstat
+ -mean
+ -prefix /tmp/functional/20190109_114343PEER1s003a001A_resample_volreg_tstat.nii.gz /tmp/functional/20190109_114343PEER1s003a001A_resample_volreg.nii.gz
+
+++ 3dTstat: AFNI version=AFNI_18.2.04 (Jul  6 2018) [64-bit]
+++ Authored by: KR Hammett & RW Cox
+++ Output dataset /tmp/functional/20190109_114343PEER1s003a001A_resample_volreg_tstat.nii.gz
+
+Elapsed time: 1.98s
+3dvolreg
+ -Fourier
+ -twopass
+ -1Dfile /tmp/functional/resample.1D
+ -1Dmatrix_save /tmp/functional/aff12.1D
+ -prefix /tmp/functional/20190109_114343PEER1s003a001A_resample_volregA.nii.gz
+ -base /tmp/functional/20190109_114343PEER1s003a001A_resample_volreg_tstat.nii.gz
+ -zpad 4
+ -maxdisp1D /tmp/functional/max_displacement.1D /tmp/functional/20190109_114343PEER1s003a001A_resample.nii.gz
+
+++ 3dvolreg: AFNI version=AFNI_18.2.04 (Jul  6 2018) [64-bit]
+++ Authored by: RW Cox
+++ Coarse del was 10, replaced with 6
+++ Max displacement in automask = 0.42 (mm) at sub-brick 130
+++ Max delta displ  in automask = 0.14 (mm) at sub-brick 54
+[7m*+ WARNING:[0m Overwriting file /tmp/functional/max_displacement.1D
+[7m*+ WARNING:[0m Overwriting file /tmp/functional/max_displacement_delt.1D
+** Warning: overwriting file /tmp/functional/resample.1D
+
+Elapsed time: 412.94s
+3dAutomask
+ -apply_prefix /tmp/functional/20190109_114343PEER1s003a001A_resample_volregA_masked.nii.gz
+ -prefix /tmp/functional/20190109_114343PEER1s003a001A_resample_volregA_mask.nii.gz /tmp/functional/20190109_114343PEER1s003a001A_resample_volregA.nii.gz
+
+++ 3dAutomask: AFNI version=AFNI_18.2.04 (Jul  6 2018) [64-bit]
+++ Authored by: Emperor Zhark
+++ Loading dataset /tmp/functional/20190109_114343PEER1s003a001A_resample_volregA.nii.gz
+++ Forming automask
+ + Fixed clip level = 158.749207
+ + Used gradual clip level = 134.390137 .. 188.998199
+ + Number voxels above clip level = 120160
+ + Clustering voxels ...
+ + Largest cluster has 116246 voxels
+ + Clustering voxels ...
+ + Largest cluster has 108392 voxels
+ + Filled  1740 voxels in small holes; now have 110132 voxels
+ + Filled    29 voxels in large holes; now have 110161 voxels
+ + Clustering voxels ...
+ + Largest cluster has 110141 voxels
+ + Clustering non-brain voxels ...
+ + Clustering voxels ...
+ + Largest cluster has 313197 voxels
+ + Mask now has 110163 voxels
+++ 110163 voxels in the mask [out of 423360: 26.02%]
+++ first  10 x-planes are zero [from R]
+++ last   10 x-planes are zero [from L]
+++ first   1 y-planes are zero [from P]
+++ last   11 y-planes are zero [from A]
+++ first   0 z-planes are zero [from I]
+++ last    0 z-planes are zero [from S]
+++ Output dataset /tmp/functional/20190109_114343PEER1s003a001A_resample_volregA_mask.nii.gz
+++ applying mask to original data
+++ Writing masked data
+++ Output dataset /tmp/functional/20190109_114343PEER1s003a001A_resample_volregA_masked.nii.gz
+++ CPU time = 0.000000 sec
+
+Elapsed time: 7.33s
+3dTstat
+ -mean
+ -prefix /tmp/functional/20190109_114343PEER1s003a001A_resample_volregA_masked_tstat.nii.gz /tmp/functional/20190109_114343PEER1s003a001A_resample_volregA_masked.nii.gz
+
+++ 3dTstat: AFNI version=AFNI_18.2.04 (Jul  6 2018) [64-bit]
+++ Authored by: KR Hammett & RW Cox
+++ Output dataset /tmp/functional/20190109_114343PEER1s003a001A_resample_volregA_masked_tstat.nii.gz
+
+Elapsed time: 1.53s
+flirt
+ -in /tmp/functional/20190109_114343PEER1s003a001A_resample_volregA_masked_tstat.nii.gz
+ -ref /tmp/anatomical/co20190109_114343MPRAGESIEMENSTi1100s011a1001A_resample_skullstrip_orig.nii.gz
+ -omat /tmp/functional/20190109_114343PEER1s003a001A_resample_volregA_masked_tstat_flirt.mat
+ -cost corratio
+ -dof 6
+ -interp trilinear
+
+
+Elapsed time: 5.87s
+flirt
+ -in /tmp/functional/20190109_114343PEER1s003a001A_resample_volregA_masked_tstat.nii.gz
+ -ref /tmp/anatomical/co20190109_114343MPRAGESIEMENSTi1100s011a1001A_resample_skullstrip_orig.nii.gz
+ -omat /tmp/functional/20190109_114343PEER1s003a001A_resample_volregA_masked_tstat_wmreg.mat
+ -cost bbr
+ -wmseg /tmp/anatomical/segment_prob_2_maths.nii.gz
+ -dof 6
+ -init /tmp/functional/20190109_114343PEER1s003a001A_resample_volregA_masked_tstat_flirt.mat
+ -schedule /usr/share/fsl/5.0/etc/flirtsch/bbr.sch
+0.357084 0.999999 -0.001632 0.000016 0.000000 0.001630 0.999099 0.042417 0.000000 -0.000085 -0.042417 0.999100 0.000000 0.486100 4.118135 1.652265 1.000000 
+
+
+Elapsed time: 239.85s
+c3d_affine_tool
+ -ref /tmp/anatomical/co20190109_114343MPRAGESIEMENSTi1100s011a1001A_resample_skullstrip_orig.nii.gz
+ -src /tmp/functional/20190109_114343PEER1s003a001A_resample_volregA_masked_tstat.nii.gz /tmp/functional/20190109_114343PEER1s003a001A_resample_volregA_masked_tstat_wmreg.mat
+ -fsl2ras
+ -oitk /tmp/functional/affine.txt
+
+
+Elapsed time: 0.22s
+sed 's/MatrixOffsetTransformBase_double_3_3/AffineTransform_double_3_3/' /tmp/functional/affine.txt
+ -i
+
+
+Elapsed time: 0.01s
+antsApplyTransforms
+ --default-value 0
+ --dimensionality 3
+ --float 0
+ --input /tmp/functional/20190109_114343PEER1s003a001A_resample_volregA.nii.gz
+ --input-image-type 3
+ --interpolation Linear
+ --output /tmp/functional/20190109_114343PEER1s003a001A_resample_volregA_antswarp.nii.gz
+ --reference-image /usr/share/fsl/5.0/data/standard/MNI152_T1_2mm_brain.nii.gz
+ --transform /tmp/anatomical/transform3Warp.nii.gz
+ --transform /tmp/anatomical/transform2Affine.mat
+ --transform /tmp/anatomical/transform1Rigid.mat
+ --transform /tmp/anatomical/transform0DerivedInitialMovingTranslation.mat
+ --transform /tmp/functional/affine.txt
+
+
+Elapsed time: 71.40s

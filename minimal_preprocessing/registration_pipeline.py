@@ -1,6 +1,5 @@
 from pathlib import Path
-from subprocess import Popen, PIPE
-import shlex
+from minimal_preprocessing.command_utils import run_cmd
 import os
 
 REGISTRATION = (
@@ -113,14 +112,6 @@ def main(anatomical_path, func, mean, wm, trans3, trans2, trans1, trans0, output
         )
         run_cmd(env, warp_cmd)
     return warped
-
-
-def run_cmd(env, refit_cmd):
-    print_afni_cmd(refit_cmd)
-    p = Popen(shlex.split(refit_cmd), stdout=PIPE, stderr=PIPE, env=env)
-    stdout, stderr = p.communicate()
-    print(stdout.decode("UTF-8"))
-    print(stderr.decode("UTF-8"))
 
 
 if __name__ == "__main__":

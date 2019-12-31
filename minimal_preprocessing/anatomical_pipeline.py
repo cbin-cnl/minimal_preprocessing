@@ -1,9 +1,8 @@
 import argparse
 from pathlib import Path
 import shutil
-from subprocess import Popen, PIPE
-import shlex
 import os
+from minimal_preprocessing.command_utils import run_cmd
 
 REFIT = "3drefit -deoblique {filepath}"
 RESAMPLE = "3dresample -orient RPI -prefix {outpath} -inset {filepath}"
@@ -42,9 +41,6 @@ REGISTRATION = (
     "--winsorize-image-intensities [0.01,0.99] -v"
 )
 
-
-def print_afni_cmd(cmd_str):
-    print(cmd_str.replace(" -", "\n -"))
 
 
 def anat_pipeline(anatomical_path, output_path):
@@ -106,14 +102,6 @@ def anat_pipeline(anatomical_path, output_path):
         reg_cmd = REGISTRATION.format(filepath=skullstrip, outpath=output_folder)
         run_cmd(env, reg_cmd)
     return skullstrip, wm_segment, transform3, transform2, transform1, transform0
-
-
-def run_cmd(env, refit_cmd):
-    print_afni_cmd(refit_cmd)
-    p = Popen(shlex.split(refit_cmd), stdout=PIPE, stderr=PIPE, env=env)
-    stdout, stderr = p.communicate()
-    print(stdout.decode("UTF-8"))
-    print(stderr.decode("UTF-8"))
 
 
 if __name__ == "__main__":

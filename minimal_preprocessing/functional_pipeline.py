@@ -1,31 +1,27 @@
 import argparse
 from pathlib import Path
 import shutil
-from subprocess import Popen, PIPE
-import shlex
+from minimal_preprocessing.command_utils import run_cmd, set_logging
 import os
+import logging
 
 REFIT = "3drefit -deoblique {filepath}"
 RESAMPLE = "3dresample -orient RPI -prefix {outpath} -inset {filepath}"
 MEAN = "3dTstat -mean -prefix {outpath} {filepath}"
 MOTION_CORRECTION = (
-    "3dvolreg -Fourier -twopass -1Dfile resample.1D "
-    "-1Dmatrix_save aff12.1D "
+    "3dvolreg -Fourier -twopass -1Dfile {out_folder}/resample.1D "
+    "-1Dmatrix_save {out_folder}/aff12.1D "
     "-prefix {outpath} "
     "-base {meanpath} "
     "-zpad 4 "
-    "-maxdisp1D max_displacement.1D {filepath}"
+    "-maxdisp1D {out_folder}/max_displacement.1D {filepath}"
 )
 AUTOMASK = "3dAutomask " "-apply_prefix {outpath} " "-prefix {maskpath} " "{filepath}"
 
 
-def print_bash_cmd(cmd_str):
-    print(cmd_str.replace(" -", "\n -"))
-
-
 def func_pipeline(functional_path, output_path):
     if not Path(functional_path).exists():
-        print("The anat file does not exist at: " + functional_path)
+        print("The func file does not exist at: " + functional_path)
         exit(1)
     if not Path(output_path).exists():
         print("The output folder does not exist at: " + output_path)
@@ -59,7 +55,7 @@ def func_pipeline(functional_path, output_path):
     volreg = resampled.replace(".nii.gz", "_volreg.nii.gz")
     if not Path(volreg).exists():
         volreg_cmd_one = MOTION_CORRECTION.format(
-            filepath=resampled, meanpath=mean, outpath=volreg
+            filepath=resampled, meanpath=mean, outpath=volreg, out_folder=output_path
         )
         run_cmd(env, volreg_cmd_one)
 
@@ -73,7 +69,7 @@ def func_pipeline(functional_path, output_path):
     volregA = resampled.replace(".nii.gz", "_volregA.nii.gz")
     if not Path(volregA).exists():
         volreg_cmd_two = MOTION_CORRECTION.format(
-            filepath=resampled, meanpath=volreg_mean, outpath=volregA
+            filepath=resampled, meanpath=volreg_mean, outpath=volregA, out_folder=output_path
         )
         run_cmd(env, volreg_cmd_two)
 
@@ -91,17 +87,10 @@ def func_pipeline(functional_path, output_path):
     return volregA, masked, masked_mean
 
 
-def run_cmd(env, refit_cmd):
-    print_bash_cmd(refit_cmd)
-    p = Popen(shlex.split(refit_cmd), stdout=PIPE, stderr=PIPE, env=env)
-    stdout, stderr = p.communicate()
-    print(stdout.decode("UTF-8"))
-    print(stderr.decode("UTF-8"))
-
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Process a functional image")
     parser.add_argument("func_path", help="path to the functional image")
     parser.add_argument("output_path", help="path to the output folder")
     args = parser.parse_args()
+    set_logging(logging.DEBUG)
     func_pipeline(args.func_path, args.output_path)
