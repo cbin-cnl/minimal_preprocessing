@@ -4,3 +4,4 @@ venv
 *.nii.gz
 *.1D
 __pycache__
+*.log
