@@ -92,12 +92,11 @@ def main(anatomical_path, func, mean, wm, trans3, trans2, trans1, trans0, output
         run_cmd(env, wmreg_cmd)
 
     affine = str(output_path / "affine.txt")
-    if not Path(affine).exists():
-        affine_cmd = CONVERT_AFFINE.format(
-            anatpath=anatomical_path, meanpath=mean, filepath=wmreg, outfile=affine
-        )
-        run_cmd(env, affine_cmd)
-        run_cmd(env, TO_ANTS.format(filepath=affine))
+    affine_cmd = CONVERT_AFFINE.format(
+        anatpath=anatomical_path, meanpath=mean, filepath=wmreg, outfile=affine
+    )
+    run_cmd(env, affine_cmd)
+    run_cmd(env, TO_ANTS.format(filepath=affine))
 
     warped = str(func).replace(".nii.gz", "_antswarp.nii.gz")
     if not Path(warped).exists():
