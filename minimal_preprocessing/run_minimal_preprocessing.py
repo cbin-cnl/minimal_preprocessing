@@ -47,6 +47,7 @@ def run_pipelines(func_images, anat_image, output_directory):
     shutil.copy(str(transform2), str(anat_output))
     shutil.copy(str(transform1), str(anat_output))
     shutil.copy(str(transform0), str(anat_output))
+    registration_list = []
     for func_async, tmp_functional in zip(async_list, functional_dirs):
         motion_corrected, masked, masked_mean = func_async.get()
         func_output = output_dir / "functional"
@@ -56,17 +57,13 @@ def run_pipelines(func_images, anat_image, output_directory):
         shutil.copy(masked, str(func_output))
         shutil.copy(masked_mean, str(func_output))
 
-        warped = rp.main(
-            skullstrip,
-            motion_corrected,
-            masked_mean,
-            wm_segment,
-            transform3,
-            transform2,
-            transform1,
-            transform0,
-            tmp_functional,
+        register_async = pool.apply_async(
+            rp.main, args=(skullstrip, motion_corrected, masked_mean, wm_segment, transform3,
+                           transform2, transform1, transform0, tmp_functional)
         )
+        registration_list.append(register_async)
+    for register_async in registration_list:
+        warped = register_async.get()
         shutil.copy(warped, str(output_dir))
 
 
