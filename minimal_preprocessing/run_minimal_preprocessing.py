@@ -9,7 +9,7 @@ import logging
 import multiprocessing as mp
 
 
-def run_pipelines(func_images, anat_image, output_directory):
+def run_pipelines(func_images, anat_image, output_directory, num_processes=4):
     cu.set_logging(logging.DEBUG)
 
     tmp_anatomical = Path("/tmp/anatomical")
@@ -20,7 +20,7 @@ def run_pipelines(func_images, anat_image, output_directory):
     if not tmp_anatomical.exists():
         tmp_anatomical.mkdir()
 
-    pool = mp.Pool(processes=3)
+    pool = mp.Pool(num_processes)
     anat_async = pool.apply_async(
         ap.anat_pipeline, args=(anat_image, str(tmp_anatomical))
     )
